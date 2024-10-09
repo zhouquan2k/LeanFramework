@@ -1,0 +1,37 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.leanddd.component</groupId>
+        <artifactId>LeanFramework</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <artifactId>Interface</artifactId>
+    <packaging>jar</packaging>
+    <name>Interface</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.leanddd.component</groupId>
+            <artifactId>Common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.leanddd.component</groupId>
+            <artifactId>Data</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- spring webmvc annotations -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+</project>
