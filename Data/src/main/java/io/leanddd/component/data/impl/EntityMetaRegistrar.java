@@ -52,6 +52,10 @@ public class EntityMetaRegistrar {
     static final String DBTypeEnum = "Enum:com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant";
 
     static final Metadata metadata = new Metadata();
+    static {
+        metadata.getDictionaries().put("Boolean", List.of(new DictionaryItemDef(true, "", EnumTag.Success.getDesc()),
+                new DictionaryItemDef(false, "", EnumTag.Warning.getDesc())));
+    }
 
     private static final Pattern CAMELCASE_PATTERN = Pattern.compile("[A-Z]");
     private static final char UNDERLINE = '_';
@@ -132,9 +136,9 @@ public class EntityMetaRegistrar {
                 .getAttribute(AnnotationsAttribute.visibleTag);
         MetaEntity metaEntity = (MetaEntity) cc.getAnnotation(MetaEntity.class);
         EntityDef entityDef = null;
-        // 基类不处理类annotation
+        // base class won't process annotation
         // if (!metaEntity.isBase()) {
-        // Entity类上的annotation
+        // annotation on entity
         Map<String, Object> clsMetaData = classMetaToMap(cc, metaEntity);
         log.debug("# ...MetaEntity.{}", cc.getSimpleName());
         var metaMap = MetaDefinitions.metaMap;
@@ -157,10 +161,10 @@ public class EntityMetaRegistrar {
             String metaType = (String) metaData.get("type"); // meta.value().toString();
             AnnotationsAttribute fAttr = (AnnotationsAttribute) field.getFieldInfo()
                     .getAttribute(AnnotationsAttribute.visibleTag);
-            if (metaMap.containsKey(metaType)) {
+            if (Util.isNotEmpty(metaType))
                 processAnnotation(ci, fAttr, (AnnotationDesc[]) metaMap.get(metaType), metaData);
-                processAnnotation(ci, fAttr, (AnnotationDesc[]) metaMap.get("_common"), metaData);
-            }
+            processAnnotation(ci, fAttr, (AnnotationDesc[]) metaMap.get("_common"), metaData);
+
             // field.getFieldInfo().addAttribute(fAttr);
             // log.debug("...metadata: {}", metaData);
             log.debug("...{} = {}", field.getName(), fAttr);
@@ -188,8 +192,6 @@ public class EntityMetaRegistrar {
                 break;
             }
         }
-        metadata.getDictionaries().put("Boolean", List.of(new DictionaryItemDef(true, "是", EnumTag.Success.getDesc()),
-                new DictionaryItemDef(false, "否", EnumTag.Warning.getDesc())));
 
         EntityDef entityDef = new EntityDef(metaEntity.name().length() > 0 ? metaEntity.name() : cc.getSimpleName(),
                 metaEntity.label(), cc.getName(), metaEntity.tableName(), idField, fields);
@@ -231,14 +233,14 @@ public class EntityMetaRegistrar {
                 if (EnumDescription.class.isAssignableFrom(enumClass)) {
                     for (Object enumValue : enumValues) {
                         var ed = (EnumDescription) enumValue;
-                        dict.add(new DictionaryItemDef(enumValue, Util.isEmpty(ed.getDesc()) ? "" + enumValue : ed.getDesc(),
+                        dict.add(new DictionaryItemDef(enumValue, ed.getDesc(),
                                 (ed.getTag() != null) ? ed.getTag().getDesc() : null));
                     }
                     metadata.getDictionaries().put(simpleName, dict);
                 }
             }
         }
-        var dbColumnName = camelCase2UnderlineCase(name); // TODO
+        var dbColumnName = camelCase2UnderlineCase(name);
         var refData = (String) fieldMeta.get("refData");
 
         var fieldDef = new FieldDef(name, dbColumnName, (String) fieldMeta.get("label"), type,
@@ -246,8 +248,8 @@ public class EntityMetaRegistrar {
                 (Boolean) fieldMeta.get("isNull"), (Integer) fieldMeta.getOrDefault("length", -1),
                 (Boolean) fieldMeta.getOrDefault("hidden", false),
                 (Boolean) fieldMeta.getOrDefault("immutable", false),
-                (Boolean) fieldMeta.get("editable"),
                 (Boolean) fieldMeta.getOrDefault("persistable", true),
+                (Boolean) fieldMeta.get("editable"),
                 (Boolean) fieldMeta.get("searchable"),
                 (Boolean) fieldMeta.get("listable"), (String) fieldMeta.get("defaultValue"),
                 (String) fieldMeta.get("uiType"),
@@ -257,19 +259,17 @@ public class EntityMetaRegistrar {
     }
 
     private String getGenericElementClassName(String genericSignature) {
-        int start = genericSignature.indexOf('<') + 1; // 跳过 '<'
+        int start = genericSignature.indexOf('<') + 1;
         int end = genericSignature.lastIndexOf('>');
 
         if (start > 0 && end > start) {
             String elementTypeSignature = genericSignature.substring(start, end);
             if (elementTypeSignature.startsWith("L") && elementTypeSignature.endsWith(";")) {
-                // 去掉开头的 'L' 和结尾的 ';'
                 String className = elementTypeSignature.substring(1, elementTypeSignature.length() - 1);
-                // 将 '/' 替换为 '.'
                 return className.replace('/', '.');
             }
         }
-        return null; // 如果没有找到有效的泛型参数
+        return null;
     }
 
     @SuppressWarnings("unchecked")
@@ -308,7 +308,7 @@ public class EntityMetaRegistrar {
         {
             var permissionCls = service.permissions();
             List<PermissionDef> permissions = null;
-            if (permissionCls.isEnum()) { // TODO
+            if (permissionCls.isEnum()) {
                 permissions = Util.mapToList(Arrays.asList(permissionCls.getEnumConstants()).stream(),
                         permission -> new PermissionDef(((Enum) permission).name()));
                 // ((EnumDescription) permission).getDesc()));
@@ -325,7 +325,7 @@ public class EntityMetaRegistrar {
                     return new MethodDef(method.getName(), method.getName(), null);
                 }).collect(Collectors.toList());
 
-                ServiceDef function = new ServiceDef(Util.isNotEmpty(service.name()) ? service.name() : cc.getSimpleName(), cc.getName(), service.value(),
+                ServiceDef function = new ServiceDef(Util.isNotEmpty(service.name()) ? service.name() : cc.getSimpleName(), cc.getName(), service.value() ,
                         Util.isEmpty(service.permissionDomain()) ? service.name() : service.permissionDomain(), permissions, service.order()
                         , methodDefs);
                 metadata.getServices().add(function);
@@ -420,11 +420,14 @@ public class EntityMetaRegistrar {
         // 3. type
         if (meta.value() != Type.Default)
             ret.put("type", meta.value().toString());
-        // 4. from type defaults
         var type = Type.valueOf((String) ret.getOrDefault("type", "Default"));
-        var typeDefaults = AllTypeDefaults.get(type.name());
-        if (typeDefaults != null)
-            ret.putAll(typeDefaults);
+
+        // 4. from type defaults
+        if (meta.category() == Meta.Category.None) { // only take effect when not using Category
+            var typeDefaults = AllTypeDefaults.get(type.name());
+            if (typeDefaults != null)
+                ret.putAll(typeDefaults);
+        }
 
         // 5. from other meta properties
         if (meta.length() > 0)
@@ -472,9 +475,10 @@ public class EntityMetaRegistrar {
         List<AnnotationDesc> annotationDescList = new ArrayList<>(Arrays.asList(annotationDescs));
 
         // not persistant
-        if (metaData.containsKey("persisable")) {
+        if (metaData.containsKey("persistable")) {
             var persistable = (Boolean) metaData.get("persistable");
             if (!persistable) {
+                // not a database field
                 annotationDescList = annotationDescList.stream().filter(desc -> !List.of("com.gitee.sunchenbin.mybatis.actable.annotation.Column").contains(desc.getClassName()))
                         .collect(Collectors.toList());
                 annotationDescList.addAll(Arrays.asList(NoPersistent));
@@ -506,7 +510,7 @@ public class EntityMetaRegistrar {
 
                     if (ap.value instanceof String) {
                         String str = (String) ap.value;
-                        if (str.indexOf("${") >= 0) { // 这是一个对Meta属性的引用
+                        if (str.indexOf("${") >= 0) { // reference to a meta property
                             value = JSON.parse(Util.format(str, metaData));
                         } else
                             value = ap.value;

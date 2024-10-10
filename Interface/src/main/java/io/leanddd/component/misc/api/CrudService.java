@@ -1,4 +1,4 @@
-package io.leanddd.component.api;
+package io.leanddd.component.misc.api;
 
 import io.leanddd.component.common.BizException;
 import org.springframework.web.bind.annotation.*;

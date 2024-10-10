@@ -13,7 +13,7 @@ public interface OperateLogService {
 
     void persist(OperateLog log);
 
-    // TODO 分页支持
+    // TODO multiple page support
     @GetMapping
     List<OperateLog> queryOperateLogs();
 

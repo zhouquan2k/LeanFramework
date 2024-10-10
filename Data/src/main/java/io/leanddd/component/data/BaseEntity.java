@@ -51,6 +51,10 @@ public class BaseEntity<T> implements Serializable, Cloneable {
     @JsonIgnore
     protected Boolean delFlag;
 
+    public void init() {
+
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public T clone() {

@@ -34,7 +34,6 @@ public class SecurityConfig {
 
     @Value("${app.web.anonymousAccess}")
     String[] anonymousAccess;
-    // List<String> anonymousAccess;
 
     @Bean
     ITokenUtil createTokenUtil(SecurityProperties properties) {
@@ -55,28 +54,20 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity, TokenFilter tokenFilter, CorsFilter corsFilter)
             throws Exception {
-        // 省略HttpSecurity的配置
         httpSecurity.csrf().disable().addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
-                // 授权异常
                 .exceptionHandling().authenticationEntryPoint(createAuthenticationEntryPoint())
                 .accessDeniedHandler(createAccessDeniedHandler()).and()
-                // 防止iframe 造成跨域
                 .headers().frameOptions().disable()
-                // 不创建会话
-                // .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .and().sessionManagement()
                 .and().authorizeRequests().antMatchers("/flowable-rest/**").permitAll()
                 .antMatchers("/api/public/**").permitAll()
-                // 放行OPTIONS请求
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                // 自定义匿名访问所有url放行 ： 允许匿名和带权限以及登录用户访问
                 .antMatchers(this.anonymousAccess).permitAll();
 
         if (!this.authenticateNeeded) {
-            httpSecurity.authorizeRequests().antMatchers("/api/**").permitAll(); //TODO 测试临时关闭安检
+            httpSecurity.authorizeRequests().antMatchers("/api/**").permitAll();
         }
-        // 所有请求都需要认证
         httpSecurity.authorizeRequests().anyRequest().authenticated();
 
         return httpSecurity.build();
@@ -87,7 +78,6 @@ public class SecurityConfig {
             @Override
             public void commence(HttpServletRequest request, HttpServletResponse response,
                                  AuthenticationException authException) throws IOException {
-                // 当用户尝试访问安全的REST资源而不提供任何凭据时，将调用此方法发送401 响应
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
                         authException == null ? "Unauthorized" : authException.getMessage());
             }
@@ -99,7 +89,6 @@ public class SecurityConfig {
             @Override
             public void handle(HttpServletRequest request, HttpServletResponse response,
                                AccessDeniedException accessDeniedException) throws IOException {
-                // 当用户在没有授权的情况下访问受保护的REST资源时，将调用此方法发送403 Forbidden响应
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, accessDeniedException.getMessage());
             }
         };

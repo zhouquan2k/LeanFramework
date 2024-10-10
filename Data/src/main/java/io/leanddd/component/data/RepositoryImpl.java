@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class RepositoryImpl<T> implements Repository<T> {
+public class RepositoryImpl<T extends BaseEntity> implements Repository<T> {
 
     private final Class<T> entityClass;
     private final CrudRepository<T, String> springRepository;
@@ -70,21 +70,19 @@ public class RepositoryImpl<T> implements Repository<T> {
         Util.notSupport();
     }
 
+
     @Override
     public T create(Object obj) {
         try {
+            T ret = null;
             if (obj == null)
-                return entityClass.newInstance();
-            try {
-                var constructor = entityClass.getConstructor(obj.getClass());
-                return constructor.newInstance(obj);
-            } catch (NoSuchMethodException e) {
+                ret = entityClass.newInstance();
+            else if (entityClass.isInstance(obj)) {
+                ret = (T) obj;
             }
-            if (entityClass.isInstance(obj)) {
-                return (T) obj;
-            }
-            Util.check(false, "can't create instance of type:%s", entityClass.getName());
-            return null;
+            Util.check(ret != null, "can't create instance of type:%s", entityClass.getName());
+            ret.init();
+            return ret;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

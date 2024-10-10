@@ -11,9 +11,18 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class Context {
 
+    static final String RESOURCE_DESCRIPTOR = "resource_descriptor";
+    static final private AuthInfo EmptyAuth = new AuthInfo() {
+        public String getUsername() {
+            return null;
+        }
+    };
     static Context theInstance;
-
     static String currentTimezone;
+    private static ThreadLocal<Map<String, Object>> threadLocal = new ThreadLocal<>();
+    private final SecurityUtil securityUtil;
+
+    private final BeanMgr beanMgr;
 
     public static void setTimezone(String currentTimezone) {
         Context.currentTimezone = currentTimezone;
@@ -22,22 +31,6 @@ public class Context {
     public static String getTimezone() {
         return Context.currentTimezone;
     }
-
-    @PostConstruct
-    public void init() {
-        theInstance = this;
-    }
-
-    private final SecurityUtil securityUtil;
-
-    private final BeanMgr beanMgr;
-
-    static final private AuthInfo EmptyAuth = new AuthInfo() {
-        @Override
-        public String getUsername() {
-            return null;
-        }
-    };
 
     public static String getUserId() {
         return theInstance.securityUtil.getAuthInfo().orElseGet(() -> EmptyAuth).getUserId();
@@ -59,14 +52,13 @@ public class Context {
                 : false;
     }
 
-    static final String RESOURCE_DESCRIPTOR = "resource_descriptor";
-	public static void setAccessResource(String resource) {
-		setThreadLocalProperty(RESOURCE_DESCRIPTOR, resource);
-	}
+    public static void setAccessResource(String resource) {
+        setThreadLocalProperty(RESOURCE_DESCRIPTOR, resource);
+    }
 
-	public static String getResourceDescriptor() {
-		return (String)getThreadLocalPropertyOrDefault(RESOURCE_DESCRIPTOR, null);
-	}
+    public static String getResourceDescriptor() {
+        return (String) getThreadLocalPropertyOrDefault(RESOURCE_DESCRIPTOR, null);
+    }
 
     public static String getProperty(String name) {
         return theInstance.beanMgr.getProperty(name);
@@ -88,8 +80,6 @@ public class Context {
         theInstance.beanMgr.publishEvent(event);
     }
 
-    private static ThreadLocal<Map<String, Object>> threadLocal = new ThreadLocal<>();
-
     public static void setThreadLocalProperty(String key, Object value) {
         Map<String, Object> params = threadLocal.get();
         if (params == null) {
@@ -106,6 +96,11 @@ public class Context {
     public static Object getThreadLocalPropertyOrDefault(String key, Object defaultValue) {
         var data = threadLocal.get();
         return data != null ? data.getOrDefault(key, defaultValue) : defaultValue;
+    }
+
+    @PostConstruct
+    public void init() {
+        theInstance = this;
     }
 }
 

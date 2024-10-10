@@ -7,33 +7,62 @@ import io.leanddd.component.meta.Meta.Type;
 import io.leanddd.component.meta.Metadata;
 import io.leanddd.component.meta.Metadata.DictionaryItemDef;
 import io.leanddd.component.meta.Metadata.EntityDef;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public class MetadataProviderImpl implements MetadataProvider {
 
+    private final MessageSource messageSource;
+
     @Override
-    public Map<String, DictionaryItemDef> getDictionary(String dictionaryName) {
-        Metadata metadata = this.getMetadata(null);
+    public Map<String, DictionaryItemDef> getDictionary(String dictionaryName, Locale locale) {
+        Metadata metadata = this.getMetadata(locale, null);
         return metadata.getDictionaries().get(dictionaryName).stream()
                 .collect(Collectors.toMap(item -> (String) item.getValue(), item -> item));
     }
 
-    //TODO cache
     @Override
-    public Metadata getMetadata(List<Class<?>> classes) {
+    public Metadata getMetadata(Locale locale, List<Class<?>> classes) {
         Metadata metadata = EntityMetaRegistrar.getMetadata();
 
+        metadata.getEntities().forEach(entity -> {
+            entity.getFields().forEach(field -> {
+                var label = this.messageSource.getMessage(entity.getName() + "." + field.getName(), null, field.getName(), locale);
+                field.setLabel(label);
+            });
+        });
+        metadata.getServices().forEach(service -> {
+            var defaultValue = Util.isEmpty(service.getLabel()) ? service.getName() : service.getLabel();
+            service.setLabel(this.messageSource.getMessage("Service." + service.getName(), null, defaultValue, locale));
+            service.getPermissions().forEach(permissionDef -> {
+                var defaultLabel = Util.isEmpty(permissionDef.getLabel()) ? permissionDef.getName() : permissionDef.getLabel();
+                var label =  this.messageSource.getMessage(String.format("Service.%s.permissions.%s", service.getName(), permissionDef.getName()), null, defaultLabel, locale);
+                permissionDef.setLabel(label);
+            });
+        });
+
         final Map<String, List<DictionaryItemDef>> dictionaries = new HashMap<>(metadata.getDictionaries());
+        dictionaries.forEach((key, dictionary) -> {
+            dictionary.forEach(item -> {
+                var label = item.getLabel();
+                if (Util.isEmpty(label)) {
+                    label = this.messageSource.getMessage( key + "." + item.getValue(), null, "" + item.getValue(), locale);
+                    item.setLabel(label);
+                }
+            });
+        });
         List<DictionaryProvider<?>> allDictionaryProviders = DictionaryProvider.allProviders;
         allDictionaryProviders.forEach(provider -> {
             provider.getDictionaries().entrySet().stream().forEach(entry -> {
                 dictionaries.put(entry.getKey(), Util.mapToList(entry.getValue().stream(),
-                        item -> new DictionaryItemDef(item.getValue(), item.getLabel(), null)));
+                        item -> {
+                            String label = item.getLabel();
+                            return new DictionaryItemDef(item.getValue(), Util.isEmpty(label) ? "" + item.getValue() : label, null);
+                        }));
             });
         });
 

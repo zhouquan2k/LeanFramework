@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-// TODO Session 对于tokenFilter似乎是多此一举
+// TODO for session: tokenFilter seems meaningness
 public class SessionTokenUtil implements ITokenUtil {
 
     // TODO using app.security.tokenValidityInSeconds?

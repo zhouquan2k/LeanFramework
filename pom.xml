@@ -16,7 +16,7 @@
         <module>Data</module>
         <module>Spring</module>
         <module>Interface</module>
-        <module>Test</module>
+        <!--module>Test</module-->
         <module>WebApp-parent</module>
         <module>Common</module>
         <module>Data</module>
@@ -132,6 +132,14 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>

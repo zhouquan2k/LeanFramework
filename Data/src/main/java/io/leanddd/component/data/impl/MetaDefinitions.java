@@ -101,31 +101,30 @@ public class MetaDefinitions {
                                     }),})
 
             ));
-    // 不能定义nullable 因为nullable不能为空，无法定义默认值：可以考虑将nullable改成非boolean，从而可以定义默认值
     static Map<String, Map<String, Object>> Categories = Map.of(
             "DisplayName",
-            Map.of("type", "String", "length", 50, "searchable", true, "listable", true, "updatable", true, "label",
+            Map.of("type", "String", "length", 50, "searchable", true, "listable", true, "editable", true, "label",
                     "显示名称"), //
             "Phone",
-            Map.of("type", "String", "length", 20, "searchable", true, "listable", true, "updatable", true, "label",
+            Map.of("type", "String", "length", 20, "searchable", true, "listable", true, "editable", true, "label",
                     "电话"), //
             "PersonName",
-            Map.of("type", "String", "length", 20, "searchable", true, "listable", true, "updatable", true, "label",
+            Map.of("type", "String", "length", 20, "searchable", true, "listable", true, "editable", true, "label",
                     "姓名"), //
-            "Password", Map.of("type", "String", "length", 100, "hidden", true, "updatable", false, "label", "密码")
+            "Password", Map.of("type", "String", "length", 100, "hidden", true, "editable", false, "label", "密码", "listable", false)
     );
     static Map<String, Map<String, Object>> AllTypeDefaults = Util.<Map<String, Object>>initMap(new Object[][]{ //
-            {"ID", Map.of("hidden", true, "isNull", false, "updatable", false)}, //
-            {"IDStr", Map.of("hidden", true, "isNull", false, "updatable", false)}, //
+            {"ID", Map.of("hidden", true, "isNull", false, "editable", false)}, //
+            {"IDStr", Map.of("hidden", true, "isNull", false, "editable", false)}, //
             {"Date", Map.of("hidden", false, "colWidth", 100)}, //
-            {"RefID", Map.of("hidden", true, "updatable", false)}, //
-            {"RefIDStr", Map.of("hidden", true, "updatable", false)}, //
+            {"RefID", Map.of("hidden", true, "editable", false)}, //
+            {"RefIDStr", Map.of("hidden", true, "editable", false)}, //
             {"JSON", Map.of("listable", false, "searchable", false)}, //
             {"Enum", Map.of("listable", true, "searchable", true)}, //
             {"Dictionary", Map.of("listable", true, "searchable", true)}, //
-            {"None", Map.of("hidden", true, "updatable", false)}, //
-            {"ToMany", Map.of("hidden", true, "updatable", false)}, //
-            {"ToOne", Map.of("hidden", true, "updatable", false)}});
+            {"None", Map.of("hidden", true, "editable", false)}, //
+            {"ToMany", Map.of("hidden", true, "editable", false)}, //
+            {"ToOne", Map.of("hidden", true, "editable", false)}});
     static AnnotationDesc[] NoPersistent = new AnnotationDesc[]{
             new AnnotationDesc("org.springframework.data.annotation.Transient",
                     new AnnotationProperty[]{})
@@ -259,15 +258,15 @@ public class MetaDefinitions {
                     {"ToMany", new AnnotationDesc[]{
                             new AnnotationDesc("org.springframework.data.relational.core.mapping.MappedCollection",
                                     new AnnotationProperty[]{new AnnotationProperty("idColumn", null, "idCol"/* "refId" */),
-                                            new AnnotationProperty("keyColumn", "index")})
+                                            new AnnotationProperty("keyColumn", "index")}
+                                    , data -> (Boolean) data.get("persistable") != Boolean.FALSE)
 
                     }},
-                    // not a database field
-                    {"None", NoPersistent},
                     {"ToOne",
                             new AnnotationDesc[]{
                                     new AnnotationDesc("org.springframework.data.relational.core.mapping.MappedCollection",
-                                            new AnnotationProperty[]{new AnnotationProperty("idColumn", null, "idCol")})
+                                            new AnnotationProperty[]{new AnnotationProperty("idColumn", null, "idCol")}
+                                            , data -> (Boolean) data.get("persistable") != Boolean.FALSE)
                             }},
             });
 }

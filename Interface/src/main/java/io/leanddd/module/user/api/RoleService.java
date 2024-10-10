@@ -1,6 +1,6 @@
 package io.leanddd.module.user.api;
 
-import io.leanddd.component.api.CrudService;
+import io.leanddd.component.misc.api.CrudService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

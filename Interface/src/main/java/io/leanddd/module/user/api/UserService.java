@@ -1,7 +1,7 @@
 package io.leanddd.module.user.api;
 
-import io.leanddd.component.api.CrudService;
 import io.leanddd.component.common.BizException;
+import io.leanddd.component.misc.api.CrudService;
 import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 

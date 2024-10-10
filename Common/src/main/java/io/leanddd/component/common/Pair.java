@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Pair {
-    String key;
-    Object value;
+    private String key;
+    private Object value;
 }

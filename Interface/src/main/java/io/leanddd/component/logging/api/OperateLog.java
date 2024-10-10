@@ -54,7 +54,7 @@ public class OperateLog {
     @Meta(value = Type.Timestamp)
     private Date timestamp;
 
-    @Meta(value = Type.Integer) //单位：毫秒
+    @Meta(value = Type.Integer) // milliseconds
     private Integer duration;
 
 }

@@ -2,16 +2,15 @@ package io.leanddd.component.common;
 
 import lombok.Getter;
 
+@Getter
 public class BizException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    @Getter
     String errCode = "Generic";
-    // message show to end user
-    @Getter
+
     String errDetail; // show to developer
-    @Getter
+
     int httpStatus;
 
     public BizException(String message) {

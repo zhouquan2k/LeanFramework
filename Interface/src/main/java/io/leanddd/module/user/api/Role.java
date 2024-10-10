@@ -1,7 +1,6 @@
 package io.leanddd.module.user.api;
 
 import io.leanddd.component.meta.EnumDescription;
-import io.leanddd.component.meta.EnumEx;
 import io.leanddd.component.meta.EnumTag;
 import lombok.Data;
 import lombok.Getter;

@@ -22,7 +22,7 @@ public class TokenFilter extends OncePerRequestFilter {
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
         String requestURI = request.getRequestURI();
-        // TODO 从配置文件中读取
+        // TODO should read from configuration
         if (!requestURI.startsWith("/api/public/")) {
             AuthResult authInfo = tokenUtil.getAuthInfoFromToken(request);
             if (authInfo == null) {
