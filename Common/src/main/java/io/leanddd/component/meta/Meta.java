@@ -21,8 +21,7 @@ public @interface Meta {
 
     String[] unique() default {};
 
-    // TODO i18n from resource
-    // String label() default "";
+    String label() default "";
 
     int length() default -1;
 

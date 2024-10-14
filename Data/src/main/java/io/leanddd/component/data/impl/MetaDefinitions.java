@@ -122,7 +122,7 @@ public class MetaDefinitions {
             {"JSON", Map.of("listable", false, "searchable", false)}, //
             {"Enum", Map.of("listable", true, "searchable", true)}, //
             {"Dictionary", Map.of("listable", true, "searchable", true)}, //
-            {"None", Map.of("hidden", true, "editable", false)}, //
+            {"Default", Map.of("hidden", true, "editable", false)}, //
             {"ToMany", Map.of("hidden", true, "editable", false)}, //
             {"ToOne", Map.of("hidden", true, "editable", false)}});
     static AnnotationDesc[] NoPersistent = new AnnotationDesc[]{
@@ -267,6 +267,6 @@ public class MetaDefinitions {
                                     new AnnotationDesc("org.springframework.data.relational.core.mapping.MappedCollection",
                                             new AnnotationProperty[]{new AnnotationProperty("idColumn", null, "idCol")}
                                             , data -> (Boolean) data.get("persistable") != Boolean.FALSE)
-                            }},
+                            }}
             });
 }

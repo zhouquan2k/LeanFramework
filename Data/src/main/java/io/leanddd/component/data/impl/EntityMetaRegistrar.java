@@ -1,5 +1,10 @@
 package io.leanddd.component.data.impl;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.ConsoleAppender;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import io.leanddd.component.common.Util;
@@ -15,6 +20,7 @@ import javassist.bytecode.ClassFile;
 import javassist.bytecode.ConstPool;
 import javassist.bytecode.annotation.*;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
@@ -52,6 +58,7 @@ public class EntityMetaRegistrar {
     static final String DBTypeEnum = "Enum:com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant";
 
     static final Metadata metadata = new Metadata();
+
     static {
         metadata.getDictionaries().put("Boolean", List.of(new DictionaryItemDef(true, "", EnumTag.Success.getDesc()),
                 new DictionaryItemDef(false, "", EnumTag.Warning.getDesc())));
@@ -81,7 +88,27 @@ public class EntityMetaRegistrar {
         return builder.toString();
     }
 
-    public void initClasses(String basePackage) {
+    public static void init(String... rootPackages) {
+        initLogger();
+        new EntityMetaRegistrar().initClasses(rootPackages);
+    }
+
+    private static void initLogger() {
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        loggerContext.getLogger("org.springframework").setLevel(Level.WARN);
+        PatternLayoutEncoder encoder = new PatternLayoutEncoder();
+        encoder.setContext(loggerContext);
+        encoder.setPattern("%d{dd/HH:mm:ss.SSS} %-5level[%15.-15logger{0}-%-10.-10thread] - %msg %n");
+        encoder.start();
+
+        // 创建一个新的ConsoleAppender
+        ConsoleAppender<ILoggingEvent> consoleAppender = new ConsoleAppender<>();
+        consoleAppender.setContext(loggerContext);
+        consoleAppender.setEncoder(encoder);
+        consoleAppender.start();
+    }
+
+    public void initClasses(String[] basePackages) {
 
         var timezone = System.getenv("TZ");
         Util.check(Util.isNotEmpty(timezone), "timezone env TZ is not set");
@@ -97,11 +124,12 @@ public class EntityMetaRegistrar {
             provider.addIncludeFilter(new AnnotationTypeFilter(Service.class));
 
             // get matching classes defined in the package
-            final Set<BeanDefinition> classes = provider.findCandidateComponents(basePackage);
-
-            // this is how you can load the class type from BeanDefinition instance
-            for (BeanDefinition bean : classes) {
-                processClass(bean, bean.getBeanClassName());
+            for (String basePackage : basePackages) {
+                final Set<BeanDefinition> classes = provider.findCandidateComponents(basePackage);
+                // this is how you can load the class type from BeanDefinition instance
+                for (BeanDefinition bean : classes) {
+                    processClass(bean, bean.getBeanClassName());
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -325,7 +353,7 @@ public class EntityMetaRegistrar {
                     return new MethodDef(method.getName(), method.getName(), null);
                 }).collect(Collectors.toList());
 
-                ServiceDef function = new ServiceDef(Util.isNotEmpty(service.name()) ? service.name() : cc.getSimpleName(), cc.getName(), service.value() ,
+                ServiceDef function = new ServiceDef(Util.isNotEmpty(service.name()) ? service.name() : cc.getSimpleName(), cc.getName(), service.value(),
                         Util.isEmpty(service.permissionDomain()) ? service.name() : service.permissionDomain(), permissions, service.order()
                         , methodDefs);
                 metadata.getServices().add(function);
@@ -402,7 +430,7 @@ public class EntityMetaRegistrar {
         Map<String, Object> ret = new HashMap<String, Object>();
         // 1. default values
         ret.put("name", field.getName());
-        ret.put("label", field.getName());
+        ret.put("label", meta.label());
 
         ret.put("listable", true);
         ret.put("editable", metaEntity.defaultUpdatable());

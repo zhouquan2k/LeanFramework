@@ -31,7 +31,8 @@ public class MetadataProviderImpl implements MetadataProvider {
 
         metadata.getEntities().forEach(entity -> {
             entity.getFields().forEach(field -> {
-                var label = this.messageSource.getMessage(entity.getName() + "." + field.getName(), null, field.getName(), locale);
+                var defaultLabel = Util.isEmpty(field.getLabel()) ? field.getName() : field.getLabel();
+                var label = this.messageSource.getMessage(entity.getName() + "." + field.getName(), null, defaultLabel, locale);
                 field.setLabel(label);
             });
         });
@@ -40,7 +41,7 @@ public class MetadataProviderImpl implements MetadataProvider {
             service.setLabel(this.messageSource.getMessage("Service." + service.getName(), null, defaultValue, locale));
             service.getPermissions().forEach(permissionDef -> {
                 var defaultLabel = Util.isEmpty(permissionDef.getLabel()) ? permissionDef.getName() : permissionDef.getLabel();
-                var label =  this.messageSource.getMessage(String.format("Service.%s.permissions.%s", service.getName(), permissionDef.getName()), null, defaultLabel, locale);
+                var label = this.messageSource.getMessage(String.format("Service.%s.permissions.%s", service.getName(), permissionDef.getName()), null, defaultLabel, locale);
                 permissionDef.setLabel(label);
             });
         });
@@ -50,7 +51,7 @@ public class MetadataProviderImpl implements MetadataProvider {
             dictionary.forEach(item -> {
                 var label = item.getLabel();
                 if (Util.isEmpty(label)) {
-                    label = this.messageSource.getMessage( key + "." + item.getValue(), null, "" + item.getValue(), locale);
+                    label = this.messageSource.getMessage(key + "." + item.getValue(), null, "" + item.getValue(), locale);
                     item.setLabel(label);
                 }
             });

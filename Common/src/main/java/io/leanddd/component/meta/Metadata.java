@@ -87,6 +87,7 @@ public class Metadata {
 
     @Data
     @RequiredArgsConstructor
+    @AllArgsConstructor
     public static class PermissionDef {
         private final String name;
         private String label;

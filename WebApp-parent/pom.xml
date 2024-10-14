@@ -150,7 +150,7 @@
         <dependency>
             <groupId>io.leanddd.component</groupId>
             <artifactId>Common</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${component-version}</version>
         </dependency>
 
         <dependency>
@@ -165,12 +165,12 @@
             <version>${component-version}</version>
         </dependency>
 
-        <!--dependency>
+        <dependency>
             <groupId>io.leanddd.component</groupId>
             <artifactId>Test</artifactId>
             <version>${component-version}</version>
             <scope>test</scope>
-        </dependency-->
+        </dependency>
     </dependencies>
 
     <build>

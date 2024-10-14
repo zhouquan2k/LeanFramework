@@ -1,13 +1,13 @@
-package io.leanddd.component.spring;
+package io.leanddd;
 
-import io.leanddd.component.framework.BeanMgr;
-import io.leanddd.component.framework.Context;
-import io.leanddd.component.framework.Event;
-import io.leanddd.component.framework.SecurityUtil;
+import io.leanddd.component.data.impl.MetadataProviderImpl;
+import io.leanddd.component.framework.*;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.LocaleResolver;
@@ -17,6 +17,7 @@ import javax.annotation.Resource;
 import java.util.Locale;
 
 @Configuration
+@EnableAutoConfiguration
 public class CommonConfig {
 
     @Resource
@@ -65,6 +66,35 @@ public class CommonConfig {
         SessionLocaleResolver slr = new SessionLocaleResolver();
         slr.setDefaultLocale(Locale.ENGLISH);
         return slr;
+    }
+
+    @Bean
+    @DependsOn("_Context")
+    Object Init0() {
+        System.out.println("Init0...");
+        return new Object();
+    }
+
+    //init以前：创建表
+    @Bean
+    @DependsOn({"Init0", "MetadataProvider"})
+    // "taskExecutor"
+    Object Init() {
+        System.out.println("Init1...");
+        return new Object();
+    }
+
+    //init2 以后的是可以后期初始化的，不被依赖，如loadData
+    @Bean
+    @DependsOn({"Init", "userMapper", "startUpHandlerImpl"})
+    Object Init2() {
+        System.out.println("Init2...");
+        return new Object();
+    }
+
+    @Bean("MetadataProvider")
+    MetadataProvider metadataProvider(MessageSource messageSource) {
+        return new MetadataProviderImpl(messageSource);
     }
 }
 

@@ -16,7 +16,7 @@
         <module>Data</module>
         <module>Spring</module>
         <module>Interface</module>
-        <!--module>Test</module-->
+        <module>Test</module>
         <module>WebApp-parent</module>
         <module>Common</module>
         <module>Data</module>

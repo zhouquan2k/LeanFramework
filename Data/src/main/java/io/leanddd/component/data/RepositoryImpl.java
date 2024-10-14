@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class RepositoryImpl<T extends BaseEntity> implements Repository<T> {
+public class RepositoryImpl<T> implements Repository<T> {
 
     private final Class<T> entityClass;
     private final CrudRepository<T, String> springRepository;
@@ -81,7 +81,8 @@ public class RepositoryImpl<T extends BaseEntity> implements Repository<T> {
                 ret = (T) obj;
             }
             Util.check(ret != null, "can't create instance of type:%s", entityClass.getName());
-            ret.init();
+            if (ret instanceof BaseEntity)
+                ((BaseEntity) ret).init();
             return ret;
         } catch (Exception e) {
             throw new RuntimeException(e);
