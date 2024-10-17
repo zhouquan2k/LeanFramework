@@ -84,7 +84,7 @@ public class PermissionAspect implements BaseAspect, InitializingBean {
 
         // TODO
         if (resourcePerms.size() == 0) // check global permission only if no resource permission in meta
-            Util.checkBiz(permissionPassed, PermissinDenied, "无权访问: %s", permissions);
+            Util.checkBiz(permissionPassed, PermissinDenied, "permission denied: %s", permissions);
 
         Context.setAccessResource(null);
 
@@ -98,7 +98,7 @@ public class PermissionAspect implements BaseAspect, InitializingBean {
                 Util.check(resourceDescriptor != null, "no resource for permission: %s", perm);
                 var required = perm + resourceDescriptor;
                 return Context.hasPermission(required);
-            }), PermissinDenied, "无权访问: %s", permissions);
+            }), PermissinDenied, "permission denied: %s", permissions);
         }
         return result;
     }

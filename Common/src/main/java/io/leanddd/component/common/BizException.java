@@ -9,6 +9,8 @@ public class BizException extends RuntimeException {
 
     String errCode = "Generic";
 
+    String messagePattern;
+    Object[] messageParams;
     String errDetail; // show to developer
 
     int httpStatus;
@@ -19,6 +21,14 @@ public class BizException extends RuntimeException {
 
     public BizException(String message, String errCode, String errDetail) {
         super(message);
+        this.errCode = errCode;
+        this.errDetail = errDetail;
+    }
+
+    public BizException(String messagePattern, Object[] messageParams, String errCode, String errDetail) {
+        super(String.format(messagePattern, messageParams));
+        this.messagePattern = messagePattern;
+        this.messageParams = messageParams;
         this.errCode = errCode;
         this.errDetail = errDetail;
     }

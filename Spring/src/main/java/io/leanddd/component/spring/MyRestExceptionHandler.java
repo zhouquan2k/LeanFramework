@@ -4,7 +4,9 @@ import io.leanddd.component.common.BizException;
 import io.leanddd.component.common.Util;
 import io.leanddd.component.framework.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -21,6 +23,9 @@ import java.util.Date;
 @Slf4j
 public class MyRestExceptionHandler {
 
+    @Autowired
+    MessageSource messageSource;
+
     private static Throwable getRootException(Throwable throwable) {
         if (throwable == null) {
             return null;
@@ -35,10 +40,10 @@ public class MyRestExceptionHandler {
     @ExceptionHandler(value = Throwable.class)
     @ResponseBody
     public ResponseEntity<Response> AnyExceptionHandler(HttpServletRequest req, Throwable e) {
-        return handleException(e);
+        return handleException(req, e);
     }
 
-    private ResponseEntity<Response> handleException(Throwable e) { // ServerHttpResponse response,
+    private ResponseEntity<Response> handleException(HttpServletRequest req, Throwable e) { // ServerHttpResponse response,
 
         var logDetail = false;
         var httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -51,24 +56,25 @@ public class MyRestExceptionHandler {
         var errMessage = String.format("【%s】 %s\n【RootCause】 %s\n", e.getClass().getSimpleName(), e.getMessage(), root.getMessage());
         if (e instanceof BizException) {
             BizException be = (BizException) e;
+            var message = Util.isNotEmpty(be.getMessagePattern()) ?
+                    messageSource.getMessage("Exception." + be.getMessagePattern().replace(' ', '_'), be.getMessageParams(), be.getMessage(), req.getLocale())
+                    : be.getMessage();
             ret = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(HttpStatus.BAD_REQUEST.value(), false,
-                    be.getErrCode(), be.getMessage(), new Date(), null, null, 0));
+                    be.getErrCode(), message, new Date(), null, null, 0));
             logDetail = false;
+            errMessage = message;
         } else {
             if (e instanceof AuthenticationException) {
                 httpStatus = HttpStatus.FORBIDDEN;
-
             }
             if (httpStatus == HttpStatus.INTERNAL_SERVER_ERROR) {
                 logDetail = true;
             }
-
             ret = ResponseEntity.status(httpStatus)
                     .body(new Response(httpStatus.value(), false, httpStatus.getReasonPhrase() + "." + exceptionName,
                             errMessage,
                             new Date(), null, null, 0));
         }
-
         if (logDetail)
             log.error("***** " + Util.getErrStack(e, 0, 0));
         else

@@ -35,7 +35,7 @@ public class Util {
 
     public static void checkBiz(boolean b, String errCode, String msgFormat, Object... params) throws BizException {
         if (!b)
-            throw new BizException(errCode, String.format(msgFormat, params));
+            throw new BizException(msgFormat, params, errCode, null);
     }
 
     // for string
@@ -107,8 +107,7 @@ public class Util {
         return (o == null) ? "<null>" : o.toString();
     }
 
-    public static String getErrStack(Throwable exception, int maxLine, int maxLength)
-    {
+    public static String getErrStack(Throwable exception, int maxLine, int maxLength) {
         if (maxLine < 0) {
             ByteArrayOutputStream stream0 = new ByteArrayOutputStream();
             PrintStream stream = new PrintStream(stream0);
