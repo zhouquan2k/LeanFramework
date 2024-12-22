@@ -86,7 +86,8 @@ public class CommonConfig {
 
     //init2 以后的是可以后期初始化的，不被依赖，如loadData
     @Bean
-    @DependsOn({"Init", "userMapper", "startUpHandlerImpl"})
+    @DependsOn({"Init", "startUpHandlerImpl"})
+    //userMapper
     Object Init2() {
         System.out.println("Init2...");
         return new Object();

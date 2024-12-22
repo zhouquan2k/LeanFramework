@@ -6,7 +6,7 @@
   The purpose of LeanDDD is to provide a **simple starting point** that is aligned with DDD principles, particularly in isolating business logic from technical infrastructure. Most existing DDD frameworks I have seen are kind of overly complex, so LeanDDD aims to fill the gap by making things as simple as possible for:  
   
 	1. **Medium to Small-Scale Applications**: Suitable for department-level applications rather than large-scale enterprise apps.
-	2. **Complex Business Logic**: Ideal when business needs are intricate and keep growing and DDD methods can help manage complexity as your system evolves.
+	2. **Complex Business Logic**: Ideal when business needs are intricate and keep growing, DDD methods can help manage complexity as your system evolves.
 	3. **Flexible Growth**: Start small, keep it simple, and add complexity only when necessary.
 
 - ## Tech-Stack
@@ -15,14 +15,14 @@
 - ## LeanDDD Features
 - **DDD Principles**: Separation between **business logic** and **technical infrastructure**. The goal is to ensure that business concepts are well isolated from underlying technologies.
 - **Keep It Simple**: We emphasize starting with the simplest approach and only adopting more complex solutions as problems evolve. This leads to a more natural growth in the design.
-- **Unified Metadata with Meta-Annotations**: We use domain-level annotations that are implementation-independent, keeping your domain layer clean and free from infrastructure details. This means your domain code depends only on Java, Lombok, and LeanDDD annotations, and we transform them to implementation-specific annotations as needed.
-- **Framework & Solutions**: LeanDDD includes a foundational framework and solutions to common patterns, which are documented to help you tackle typical challenges.
+- **Unified Metadata with Meta-Annotations**: We use a set of standalone annotations that are implementation-independent, keeping your domain layer clean and free from infrastructure details. This means your domain code depends only on Java, Lombok, and LeanDDD annotations, and we transform them to implementation-specific annotations as needed.
+- **Framework & Solutions**: LeanDDD includes not only a foundational framework and commonly used modules but also solutions to common patterns, which are documented to help you tackle typical challenges.
 - **Team Development & AI-Assistant Friendly**: LeanDDD can also serve as a guide for team development and as a reference for AI-assisted coding training.
 - **Monolithic/Microservice**: you can create app with LeanDDD from a monolithic application instead of microservices at the beginning. However, you can easily extend it into smaller services if your application needs to grow, keeping maintenance simple.
 - ## Core Functionalities
 - ### Features
 - **RBAC (Role-Based Access Control)**: Manage users, roles, and permissions across different organizations.
-- **Workflow Integration**: User roles and workflows are synchronized, facilitating more effective workflow management.
+- **Workflow Integration**: Flowable integrated, users,roles and workflows are synchronized, facilitating more effective workflow management.
 - ### Development
 - **DDD Practice**:
 	- **Business and Technology Separation**: , we’re all about keeping business logic and technical details in their own lanes. That’s why our core model layer is implementation-independent—it focuses purely on the business side, true to DDD principles. Here, you’ll find Aggregates and Entities crafted using clean, object-oriented techniques. no dependency on any specific tech. We rely on Services to coordinate these domain objects and Repositories to handle their persistence
@@ -33,6 +33,7 @@
 - **Logging**: Automatically log service calls into an audit table or log file.
 - **Transaction Management**: Changes made during a single service call are part of one database transaction, including any resulting events.
 - **Declarative Permission Checks**: Check if a subject has the required permissions on a resource declaratively.
+- **i18n**: Support for internationalization and localization, unique processing for all responses and exceptions.
 - ## Components
 - ### LeanFramework
   LeanFramework should be used as a Maven module dependency for each application process. It includes the foundational components needed by all services and modules.  

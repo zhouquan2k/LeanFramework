@@ -53,6 +53,7 @@ public @interface Meta {
         RefID, RefIDStr,
         Enum, Dictionary,
         String, Text,
+        StringList,
         JSON,
         Integer, Decimal,
         Timestamp, Date, Month,

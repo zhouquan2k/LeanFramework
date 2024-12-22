@@ -204,6 +204,14 @@ public class MetaDefinitions {
                                             new AnnotationProperty("length", 50, "length"),
                                             new AnnotationProperty("comment", null, "label"),
                                             new AnnotationProperty("isNull", null, "isNull"),})}},
+                    {"StringList",
+                            new AnnotationDesc[]{new AnnotationDesc(
+                                    "com.gitee.sunchenbin.mybatis.actable.annotation.Column",
+                                    new AnnotationProperty[]{new AnnotationProperty("type", "JSON", DBTypeEnum),
+                                            new AnnotationProperty("length", 256, "length"),
+                                            new AnnotationProperty("comment", null, "label"),
+                                            new AnnotationProperty("isNull", null, "isNull")})}
+                    },
                     {"Date",
                             new AnnotationDesc[]{new AnnotationDesc(ColumnAnnotationClass,
                                     new AnnotationProperty[]{new AnnotationProperty("type", "DATE", DBTypeEnum),
