@@ -173,6 +173,14 @@
         </dependency>
     </dependencies>
 
+    <distributionManagement>
+        <repository>
+            <id>atuspace-component-maven</id>
+            <name>maven</name>
+            <url>https://atuspace-maven.pkg.coding.net/repository/myframework/maven/</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <plugins>
             <plugin>
