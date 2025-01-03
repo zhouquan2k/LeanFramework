@@ -254,6 +254,7 @@ public class EntityMetaRegistrar {
         Type type = Type.valueOf((String) fieldMeta.getOrDefault("type", "Default"));
         if (type == Type.Enum && !simpleName.equals("Boolean")) {
             if (!metadata.getDictionaries().containsKey(simpleName)) {
+                log.debug("### Enum: " + className);
                 List<DictionaryItemDef> dict = new Vector<DictionaryItemDef>();
                 Class<?> enumClass = Class.forName(className);
                 Method valuesMethod = enumClass.getDeclaredMethod("values");

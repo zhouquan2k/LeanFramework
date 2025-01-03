@@ -83,7 +83,7 @@ public class EntityHelper<T> {
 
     private List<FieldDef> getSearchableFields(EntityDef entityDef, String alias, int depth) {
         return Util.toList(entityDef.getFields().stream().filter(field -> field.isSearchable() || Objects.equals(entityDef.getIdField(), field.getName())).flatMap(field -> {
-            if (field.getType() == Type.ToMany || field.getType() == Type.ToOne) {
+            if (field.getType() == Type.ToMany || field.getType() == Type.ToOne || (!field.isPersistable() && field.getType() == Type.Default)) {
                 EntityDef subEntityDef = metadataProvider.getEntityDef(field.getFullTypeName());
                 return subEntityDef != null ? getSearchableFields(subEntityDef, field.getName(), depth + 1).stream() : Stream.of();
             } else {
