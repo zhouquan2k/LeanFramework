@@ -8,12 +8,14 @@ import io.leanddd.component.meta.Metadata;
 import io.leanddd.component.meta.Metadata.DictionaryItemDef;
 import io.leanddd.component.meta.Metadata.EntityDef;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Slf4j
 public class MetadataProviderImpl implements MetadataProvider {
 
     private final MessageSource messageSource;
@@ -27,6 +29,7 @@ public class MetadataProviderImpl implements MetadataProvider {
 
     @Override
     public Metadata getMetadata(Locale locale, List<Class<?>> classes) {
+        log.info("getMetadata locale: " + locale);
         Metadata metadata = EntityMetaRegistrar.getMetadata();
 
         metadata.getEntities().forEach(entity -> {
