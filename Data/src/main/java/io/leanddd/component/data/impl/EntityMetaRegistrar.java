@@ -112,7 +112,7 @@ public class EntityMetaRegistrar {
 
         var timezone = System.getenv("TZ");
         Util.check(Util.isNotEmpty(timezone), "timezone env TZ is not set");
-        log.info("initializing timezone: {}", timezone);
+        log.info("initializing timezone: {}.", timezone);
         Util.initDateFormat(timezone);
         Context.setTimezone(timezone);
 
