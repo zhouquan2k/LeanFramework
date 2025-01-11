@@ -3,6 +3,8 @@ package io.leanddd.component.misc.api;
 import io.leanddd.component.common.BizException;
 import org.springframework.web.bind.annotation.*;
 
+// TO BE DEPRECATED
+// cause conflict with different parameters
 public interface CrudService<VO> {
     @GetMapping("/{id}")
     VO getById(@PathVariable String id);

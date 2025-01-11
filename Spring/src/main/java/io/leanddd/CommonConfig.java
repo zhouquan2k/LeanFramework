@@ -14,7 +14,6 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.annotation.Resource;
-import java.util.Locale;
 
 @Configuration
 @EnableAutoConfiguration
@@ -56,7 +55,7 @@ public class CommonConfig {
     public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasename("messages");
-        messageSource.setDefaultLocale(Locale.ENGLISH);
+        // messageSource.setDefaultLocale(Locale.ENGLISH);
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
@@ -64,7 +63,7 @@ public class CommonConfig {
     @Bean("SessionLocalResolver")
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(Locale.ENGLISH);
+        // slr.setDefaultLocale(Locale.ENGLISH);
         return slr;
     }
 
