@@ -10,6 +10,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +33,7 @@ public class PermissionAspect implements BaseAspect, InitializingBean {
     static final String PermissinDenied = "Forbidden.PermissinDenied";
 
     public void init() {
-        var funcMetadata = metadataProvider.getMetadata(Locale.getDefault(), null).getServices();
+        var funcMetadata = metadataProvider.getMetadata(LocaleContextHolder.getLocale(), null).getServices();
         this.permissionMap = new HashMap<String, PermissionDef>();
         funcMetadata.forEach(func -> {
             func.getPermissions().forEach(perm -> {
