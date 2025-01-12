@@ -2,6 +2,7 @@ package io.leanddd;
 
 import io.leanddd.component.data.impl.MetadataProviderImpl;
 import io.leanddd.component.framework.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.annotation.Resource;
+import java.util.Locale;
 
 @Configuration
 @EnableAutoConfiguration
@@ -24,6 +26,9 @@ public class CommonConfig {
 
     @Resource
     Environment env;
+
+    @Value("${app.locale:en}")
+    String locale;
 
     @Bean("_Context")
     Context createContext(SecurityUtil securityUtil) {
@@ -62,8 +67,10 @@ public class CommonConfig {
 
     @Bean("SessionLocalResolver")
     public LocaleResolver localeResolver() {
+        var locale = Locale.forLanguageTag(this.locale);
+        Locale.setDefault(locale);
         SessionLocaleResolver slr = new SessionLocaleResolver();
-        // slr.setDefaultLocale(Locale.ENGLISH);
+        slr.setDefaultLocale(locale);
         return slr;
     }
 
@@ -76,7 +83,7 @@ public class CommonConfig {
 
     //init以前：创建表
     @Bean
-    @DependsOn({"Init0", "MetadataProvider"})
+    @DependsOn({"Init0", "SessionLocalResolver", "MetadataProvider"})
     // "taskExecutor"
     Object Init() {
         System.out.println("Init1...");
