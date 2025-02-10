@@ -83,7 +83,7 @@ public class CommonConfig {
 
     //init以前：创建表
     @Bean
-    @DependsOn({"Init0", "SessionLocalResolver", "MetadataProvider"})
+    @DependsOn({"Init0", "SessionLocalResolver", "startUpHandlerImpl"})
     // "taskExecutor"
     Object Init() {
         System.out.println("Init1...");
@@ -92,8 +92,7 @@ public class CommonConfig {
 
     //init2 以后的是可以后期初始化的，不被依赖，如loadData
     @Bean
-    @DependsOn({"Init", "startUpHandlerImpl"})
-    //userMapper
+    @DependsOn({"Init", "MetadataProvider"})
     Object Init2() {
         System.out.println("Init2...");
         return new Object();
