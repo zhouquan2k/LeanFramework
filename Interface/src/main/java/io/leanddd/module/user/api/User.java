@@ -4,14 +4,15 @@ import io.leanddd.component.data.BaseEntity;
 import io.leanddd.component.meta.EnumDescription;
 import io.leanddd.component.meta.EnumTag;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
 
 @Data
-@Builder
-@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class User extends BaseEntity<User> {
     private static final long serialVersionUID = 1L;
 

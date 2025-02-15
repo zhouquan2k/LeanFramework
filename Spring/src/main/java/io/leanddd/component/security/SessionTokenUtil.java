@@ -31,7 +31,7 @@ public class SessionTokenUtil implements ITokenUtil {
         var session = request.getSession();
         result.setToken(session.getId());
         session.setAttribute("_authInfo", result);
-        var seconds = Duration.parse("PT" + sessionTimeout).getSeconds();
+        var seconds = Duration.parse(sessionTimeout).getSeconds();
         session.setMaxInactiveInterval((int) seconds);
         return result;
     }

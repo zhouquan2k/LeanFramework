@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.leanddd.component.common.Util;
 import io.leanddd.component.meta.Meta;
 import io.leanddd.component.meta.MetaEntity;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.annotation.Version;
 
@@ -19,7 +17,9 @@ import static io.leanddd.component.meta.Meta.Type;
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = false)
+@SuperBuilder
 @MetaEntity(isBase = true)
+@NoArgsConstructor
 public class BaseEntity<T> implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
 
