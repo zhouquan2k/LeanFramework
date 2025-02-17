@@ -135,12 +135,15 @@ public class EntityHelper<T> {
         return value;
     }
 
-    public String queryByExample(Object example, String selectPart, Map<String, Object> fixedParams) {
+    public String queryByExample(Object example, String selectPart, Map<String, Object> fixedParams, List<String> customConditions) {
         if (selectPart == null)
             selectPart = String.format("select * from %s a ${where} order by a.updated_time desc",
                     entityDef.getTableName());
 
         Stream<String> conditions = getConditions(example, fixedParams);
+        if (customConditions != null) {
+            conditions = Stream.concat(conditions, customConditions.stream());
+        }
         String wherePart = "";
 
         wherePart = conditions.collect(Collectors.joining(" and "));

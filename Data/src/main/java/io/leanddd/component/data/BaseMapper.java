@@ -14,6 +14,12 @@ public interface BaseMapper<T> {
     <P> List<P> queryByExample(@Param("entityClass") Class<P> entityClass, @Param("example") Map<String, Object> example,
                                @Param("select") String select, @Param("fixedParams") Map<String, Object> fixedParams);
 
+    @SelectProvider(type = QueryProvider.class, method = "queryByExample")
+    @ResultMap("Example")
+    <P> List<P> queryByExampleWithCustomConditions(@Param("entityClass") Class<P> entityClass, @Param("example") Map<String, Object> example,
+                                                   @Param("select") String select, @Param("fixedParams") Map<String, Object> fixedParams,
+                                                   @Param("customConditions") List<String> customConditions);
+
     // for use with initData
     @SelectProvider(type = QueryProvider.class, method = "initRow")
     void initRow(@Param("data") Object data);

@@ -1,5 +1,6 @@
 package io.leanddd.component.data;
 
+import java.util.List;
 import java.util.Map;
 
 // Helper of mybatis to build sql
@@ -10,8 +11,9 @@ public class QueryProvider {
         String sql = (String) params.get("select");
         Class<?> entityClass = (Class<?>) params.get("entityClass");
         var fixedParams = (Map<String, Object>) params.get("fixedParams");
+        var customConditions = (List<String>) params.getOrDefault("customConditions", null);
         EntityHelper<?> queryHelper = EntityHelper.getInstance(entityClass);
-        return queryHelper.queryByExample(example, sql, fixedParams);
+        return queryHelper.queryByExample(example, sql, fixedParams, customConditions);
     }
 
     public static String initRow(Map<String, Object> params) {
