@@ -15,6 +15,10 @@ public interface AuthInfo extends Serializable {
         return null;
     }
 
+    default String getPrimaryDepartment() {
+        return null;
+    }
+
     default Set<String> getDepartments() {
         return null;
     }

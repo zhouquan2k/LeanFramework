@@ -28,6 +28,7 @@ public class AuthResult implements AuthInfo {
     private String username;
     private Set<String> permissions;
     private String token;
+    private String primaryDepartment;
     private boolean authencated = false;
 
     //from UserDetails
@@ -36,6 +37,7 @@ public class AuthResult implements AuthInfo {
         this.username = user.getUsername();
         this.permissions = user.getPermissions();
         this.authencated = true;
+        this.primaryDepartment = user.getPrimaryDepartment();
     }
 
     // from token

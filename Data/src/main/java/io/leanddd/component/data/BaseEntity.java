@@ -17,7 +17,7 @@ import static io.leanddd.component.meta.Meta.Type;
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = false)
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @MetaEntity(isBase = true)
 @NoArgsConstructor
 public class BaseEntity<T> implements Serializable, Cloneable {
