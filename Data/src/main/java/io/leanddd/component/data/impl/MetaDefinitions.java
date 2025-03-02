@@ -205,8 +205,7 @@ public class MetaDefinitions {
                                             new AnnotationProperty("comment", null, "label"),
                                             new AnnotationProperty("isNull", null, "isNull"),})}},
                     {"StringList",
-                            new AnnotationDesc[]{new AnnotationDesc(
-                                    "com.gitee.sunchenbin.mybatis.actable.annotation.Column",
+                            new AnnotationDesc[]{new AnnotationDesc(ColumnAnnotationClass,
                                     new AnnotationProperty[]{new AnnotationProperty("type", "JSON", DBTypeEnum),
                                             new AnnotationProperty("length", 256, "length"),
                                             new AnnotationProperty("comment", null, "label"),
@@ -223,6 +222,16 @@ public class MetaDefinitions {
                                                     new AnnotationProperty("timezone", System.getenv().get("TZ"), null)
                                             }),
                             }},
+                    {"Time", new AnnotationDesc[]{new AnnotationDesc(ColumnAnnotationClass,
+                            new AnnotationProperty[]{new AnnotationProperty("type", "TIME", DBTypeEnum),
+                                    new AnnotationProperty("comment", null, "label"),
+                                    new AnnotationProperty("isNull", null, "isNull"),}),
+                            new AnnotationDesc("com.fasterxml.jackson.annotation.JsonFormat",
+                                    new AnnotationProperty[]{new AnnotationProperty("pattern", "HH:mm",
+                                            null),
+                                            new AnnotationProperty("timezone", System.getenv().get("TZ"), null)
+                                    }),
+                    }},
                     {"Month",
                             new AnnotationDesc[]{new AnnotationDesc(ColumnAnnotationClass,
                                     new AnnotationProperty[]{new AnnotationProperty("type", "VARCHAR", DBTypeEnum),

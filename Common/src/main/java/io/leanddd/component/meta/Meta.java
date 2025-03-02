@@ -56,7 +56,7 @@ public @interface Meta {
         StringList,
         JSON,
         Integer, Decimal,
-        Timestamp, Date, Month,
+        Timestamp, Date, Time, Month,
         ToOne,
         ToMany,
         Default
