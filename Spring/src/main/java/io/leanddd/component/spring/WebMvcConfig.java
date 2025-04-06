@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -25,6 +27,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Configuration
@@ -32,6 +36,22 @@ import java.util.List;
 @AutoConfigureAfter(WebMvcAutoConfiguration.class)
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new StringToLocalTimeConverter());
+    }
+
+    public static class StringToLocalTimeConverter implements Converter<String, LocalTime> {
+        @Override
+        public LocalTime convert(String source) {
+            try {
+                return LocalTime.parse(source, DateTimeFormatter.ofPattern("HH:mm"));
+            } catch (Exception e) {
+                throw new IllegalArgumentException("invalid time format: " + source);
+            }
+        }
+    }
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {

@@ -20,6 +20,7 @@ import java.awt.image.BufferedImage;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 @ControllerAdvice(annotations = {Service.class})
@@ -41,6 +42,9 @@ public class MyRestAdvice implements ResponseBodyAdvice<Object> {
         var needTimestamp = !(l != null && l.size() > 0 && Objects.equals(l.get(0), "false"));
         var date = needTimestamp ? new Date() : null;
 
+        if (body instanceof Optional) {
+            body = ((Optional<?>) body).orElseThrow();
+        }
         if (body instanceof List) {
             List<?> list = (List<?>) body;
             var size = list.size();
