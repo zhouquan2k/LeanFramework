@@ -431,6 +431,7 @@ public class EntityMetaRegistrar {
         Map<String, Object> ret = new HashMap<String, Object>();
 
         ret.put("name", field.getName());
+        ret.put("label", "");
         // 1. default values
         ret.put("listable", true);
         ret.put("editable", metaEntity.defaultUpdatable());
@@ -444,7 +445,7 @@ public class EntityMetaRegistrar {
             if (categoryMap != null)
                 ret.putAll(categoryMap);
         }
-        
+
         // 3. type
         if (meta.value() != Type.Default)
             ret.put("type", meta.value().toString());
@@ -464,10 +465,7 @@ public class EntityMetaRegistrar {
             ret.put("length", meta.length());
         if (meta.nullable() != BooleanEx.Default)
             ret.put("isNull", meta.nullable() == BooleanEx.True);
-        /* TODO
-        if (!Util.isEmpty(meta.label()))
-            ret.put("label", meta.label());
-         */
+
         ret.put("unique", meta.unique());
         ret.put("refData", meta.refData());
         if (meta.hidden() != BooleanEx.Default)
