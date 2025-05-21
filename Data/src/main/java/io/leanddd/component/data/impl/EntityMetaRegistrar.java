@@ -429,10 +429,9 @@ public class EntityMetaRegistrar {
 
     Map<String, Object> metaToMap(CtClass cls, CtField field, Meta meta, MetaEntity metaEntity) throws Exception {
         Map<String, Object> ret = new HashMap<String, Object>();
-        // 1. default values
-        ret.put("name", field.getName());
-        ret.put("label", meta.label());
 
+        ret.put("name", field.getName());
+        // 1. default values
         ret.put("listable", true);
         ret.put("editable", metaEntity.defaultUpdatable());
         ret.put("searchable", false);
@@ -445,7 +444,7 @@ public class EntityMetaRegistrar {
             if (categoryMap != null)
                 ret.putAll(categoryMap);
         }
-
+        
         // 3. type
         if (meta.value() != Type.Default)
             ret.put("type", meta.value().toString());
@@ -457,6 +456,8 @@ public class EntityMetaRegistrar {
             if (typeDefaults != null)
                 ret.putAll(typeDefaults);
         }
+
+        if (Util.isNotEmpty(meta.label())) ret.put("label", meta.label());
 
         // 5. from other meta properties
         if (meta.length() > 0)
