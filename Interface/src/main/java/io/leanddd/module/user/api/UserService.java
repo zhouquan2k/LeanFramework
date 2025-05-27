@@ -6,6 +6,7 @@ import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Set;
 
 @RequestMapping("/api/users")
@@ -20,11 +21,16 @@ public interface UserService extends CrudService<User> {
     @DeleteMapping("/{userId}/remove/org/{orgId}")
     void removeFromOrg(@PathVariable String userId, @PathVariable String orgId);
 
+    // TODO should move all myXXX to SecurityService
     @PutMapping("my")
     void updateMyProfile(@RequestBody User user);
 
+    @PutMapping("my/options")
+    void updateMyOptions(@RequestBody Map<String,Object> options);
+
     @PutMapping("my/password")
     void updateMyPassword(@RequestBody UpdatePasswordParams params) throws BizException;
+
 
     @Data
     public class UpdatePasswordParams implements Serializable {

@@ -6,6 +6,7 @@ import io.leanddd.component.meta.EnumTag;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Map;
 import java.util.Set;
 
 @Data
@@ -25,6 +26,7 @@ public class User extends BaseEntity<User> {
     String remark;
     private Set<String> permissions;
     private Set<UserRole> roles;
+    private Map<String, Object> options;
 
     @RequiredArgsConstructor
     @Getter

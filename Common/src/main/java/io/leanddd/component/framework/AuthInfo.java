@@ -30,5 +30,8 @@ public interface AuthInfo extends Serializable {
     default Set<String> getPermissions() {
         return null;
     }
+
+    // json
+    default String getUserOptions() { return null; }
 }
 
