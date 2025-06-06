@@ -38,6 +38,9 @@ public class Util {
             throw new BizException(msgFormat, params, errCode, null);
     }
 
+    // for Boolean
+    public static boolean isTrue(Boolean b) { return b != null && b; }
+
     // for string
     public static boolean isEmpty(String str) {
         return str == null || str.length() == 0;
