@@ -29,7 +29,7 @@ public class MetadataProviderImpl implements MetadataProvider {
 
     @Override
     public Metadata getMetadata(Locale locale, List<Class<?>> classes) {
-        log.info("getMetadata locale: " + locale);
+        log.trace("getMetadata locale: " + locale);
         Metadata metadata = EntityMetaRegistrar.getMetadata();
 
         metadata.getEntities().forEach(entity -> {
