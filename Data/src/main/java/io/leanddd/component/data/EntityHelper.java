@@ -173,7 +173,7 @@ public class EntityHelper<T> {
                 if (value instanceof List) {
                     var list = (List<Object>) value;
                     return list.size() > 0 ? String.format("%s.%s in (%s)", field.getAlias(), field.getDbColName(),
-                            list.stream().map(i -> String.format("'%s'", i)).collect(Collectors.joining(", "))) : null;
+                            list.stream().map(i -> String.format("'%s'", "Boolean".equals(field.getTypeName()) ? ((Boolean)i ? "1" : "0") : i )).collect(Collectors.joining(", "))) : null;
                 }
             } else if (field.getType() == Type.Date || field.getType() == Type.Timestamp) {
                 Object value = valueMap.get(field.getName());
