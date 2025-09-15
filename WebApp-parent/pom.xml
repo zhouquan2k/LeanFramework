@@ -179,10 +179,15 @@
     </dependencies>
 
     <distributionManagement>
-        <repository>
+        <!--repository>
             <id>atuspace-component-maven</id>
             <name>maven</name>
             <url>https://atuspace-maven.pkg.coding.net/repository/myframework/maven/</url>
+        </repository-->
+        <repository>
+            <id>2589922-snapshot-Q6W6T7</id>
+            <name>maven</name>
+            <url>https://packages.aliyun.com/68c788d179c766a0475c12c1/maven/2589922-snapshot-q6w6t7</url>
         </repository>
     </distributionManagement>
 
