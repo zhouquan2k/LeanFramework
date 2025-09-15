@@ -17,5 +17,7 @@ public interface Repository<T> {
 
     // from factory
     T create(Object obj);
+
+    List<T> findAll();
 }
 

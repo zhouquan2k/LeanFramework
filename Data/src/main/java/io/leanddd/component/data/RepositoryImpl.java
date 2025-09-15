@@ -88,4 +88,9 @@ public class RepositoryImpl<T> implements Repository<T> {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public List<T> findAll() {
+        return (List<T>) springRepository.findAll();
+    }
 }
