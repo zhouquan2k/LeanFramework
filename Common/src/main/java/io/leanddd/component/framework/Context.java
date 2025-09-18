@@ -40,6 +40,10 @@ public class Context {
         return theInstance.securityUtil.getAuthInfo().orElseGet(() -> EmptyAuth).getUsername();
     }
 
+    public static String getDepartment() {
+        return theInstance.securityUtil.getAuthInfo().orElseGet(() -> EmptyAuth).getPrimaryDepartment();
+    }
+
     public static AuthInfo getAuthInfo() {
         return theInstance.securityUtil.getAuthInfo().orElse(null);
     }

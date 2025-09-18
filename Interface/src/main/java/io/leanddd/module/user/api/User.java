@@ -22,6 +22,7 @@ public class User extends BaseEntity<User> {
     String username;
     String userCode;
     String phone;
+    String department;
     UserStatus status;
     String remark;
     private Set<String> permissions;
