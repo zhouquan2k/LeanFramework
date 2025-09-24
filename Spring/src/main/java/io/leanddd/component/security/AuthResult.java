@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.beans.Transient;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -29,7 +30,7 @@ public class AuthResult implements AuthInfo {
     private Set<String> permissions;
     private String token;
     private String primaryDepartment;
-    private String userOptions;
+    private Map<String, Object> userOptions;
     private boolean authencated = false;
 
     //from UserDetails

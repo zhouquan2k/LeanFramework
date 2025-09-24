@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Component
 @ControllerAdvice(annotations = {Service.class})
@@ -59,7 +60,7 @@ public class MyRestAdvice implements ResponseBodyAdvice<Object> {
             return body;
         else if (body instanceof BufferedImage) {
             return body;
-        } else if (selectedContentType != null && selectedContentType.includes(MediaType.TEXT_HTML)) {
+        } else if (selectedContentType != null && Stream.of(MediaType.TEXT_HTML, MediaType.TEXT_MARKDOWN).anyMatch(selectedContentType::includes)) {
             return body;
         }
         var type = body != null ? body.getClass().getSimpleName() : null;

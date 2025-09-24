@@ -1,6 +1,7 @@
 package io.leanddd.component.framework;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Set;
 
 public interface AuthInfo extends Serializable {
@@ -32,6 +33,6 @@ public interface AuthInfo extends Serializable {
     }
 
     // json
-    default String getUserOptions() { return null; }
+    default Map<String, Object> getUserOptions() { return Map.of(); }
 }
 

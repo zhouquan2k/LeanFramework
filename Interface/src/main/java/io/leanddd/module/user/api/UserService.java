@@ -1,6 +1,7 @@
 package io.leanddd.module.user.api;
 
 import io.leanddd.component.common.BizException;
+import io.leanddd.component.framework.AuthInfo;
 import io.leanddd.component.misc.api.CrudService;
 import lombok.Data;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,8 @@ public interface UserService extends CrudService<User> {
     @PutMapping("my/password")
     void updateMyPassword(@RequestBody UpdatePasswordParams params) throws BizException;
 
+    // called by security service after authenticate
+    AuthInfo login(String userId, Map<String,Object> options);
 
     @Data
     public class UpdatePasswordParams implements Serializable {
