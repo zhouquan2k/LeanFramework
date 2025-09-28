@@ -479,6 +479,9 @@ public class EntityMetaRegistrar {
         ret.put("immutable", meta.immutable());
         if (meta.colWidth() >= 0)
             ret.put("colWidth", meta.colWidth());
+        if (Util.isNotEmpty(meta.defaultValue())) {
+            ret.put("defaultValue", meta.defaultValue());
+        }
 
         // 4. concludes
         ret.put("simpleType", field.getType().getSimpleName());
@@ -578,10 +581,16 @@ public class EntityMetaRegistrar {
                             .map(i -> new StringMemberValue(i, ci.constpool)).toArray(MemberValue[]::new);
                     amv.setValue(array);
                     mv = amv;
-                } else
+                } else {
+                    /*
                     Util.check(false, "%s.%s invalid type %s", annotationName, ap.name,
                             value != null ? value.getClass().getName() : "<null>");
-                annot.addMemberValue(ap.name, mv);
+
+                     */
+                    log.warn("{}.{}, invalid type {}, value: {}", annotationName, ap.name,
+                            value != null ? value.getClass().getName() : "<null>", value);
+                }
+                if (mv != null) annot.addMemberValue(ap.name, mv);
             }
             attr.addAnnotation(annot);
         }

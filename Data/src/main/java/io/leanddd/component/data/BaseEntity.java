@@ -45,7 +45,7 @@ public class BaseEntity<T> implements Serializable, Cloneable {
 
     @JsonIgnore
     @Version
-    @Meta(value = Type.Integer, hidden = True, immutable = true /* TODO defaultValue = "0" */)
+    @Meta(value = Type.Integer, hidden = True, immutable = true, defaultValue = "0" )
     protected Integer version;
     @Transient
     @JsonIgnore

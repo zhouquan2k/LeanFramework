@@ -33,7 +33,7 @@ public @interface Meta {
 
     String refData() default ""; // "dictionary.institution" "entity.AssemblyFactory"
 
-    // TODO default value definition
+    String defaultValue() default "";
     /////////
 
     // ui related below
