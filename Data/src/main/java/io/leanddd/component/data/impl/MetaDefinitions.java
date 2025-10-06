@@ -168,7 +168,7 @@ public class MetaDefinitions {
                     {"IDStr",
                             new AnnotationDesc[]{new AnnotationDesc(ColumnAnnotationClass,
                                     new AnnotationProperty[]{new AnnotationProperty("type", "VARCHAR", DBTypeEnum),
-                                            new AnnotationProperty("length", 50), new AnnotationProperty("isKey", true),
+                                            new AnnotationProperty("length", 50, "length"), new AnnotationProperty("isKey", true),
                                             new AnnotationProperty("comment", null, "label"),
                                             new AnnotationProperty("isNull", false)}),
                                     new AnnotationDesc("org.springframework.data.annotation.Id",
