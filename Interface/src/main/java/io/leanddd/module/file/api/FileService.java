@@ -13,6 +13,9 @@ public interface FileService {
             @RequestParam(value = "path", required = false) String path);
 
     @GetMapping("/{id}")
+    void viewFile(@PathVariable String id, HttpServletResponse response);
+
+    @GetMapping("/{id}/download")
     void downloadFile(@PathVariable String id, HttpServletResponse response);
 
     @DeleteMapping("/{id}")
