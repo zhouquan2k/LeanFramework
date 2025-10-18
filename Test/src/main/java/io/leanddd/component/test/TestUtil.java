@@ -18,18 +18,23 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static io.leanddd.component.meta.Meta.BooleanEx.False;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class TestUtil {
 
-    public static MockedStatic<Context> contextMock; // = Mockito.mockStatic(Context.class);
+    public static MockedStatic<Context> contextMock;
 
-    public static MockedStatic<EntityHelper> entityHelperMock; // = Mockito.mockStatic(EntityHelper.class);
+    public static MockedStatic<EntityHelper> entityHelperMock;
 
     private final static String NULL = "<NULL>";
 
     public static void init() {
         contextMock = Mockito.mockStatic(Context.class);
         entityHelperMock = Mockito.mockStatic(EntityHelper.class);
+        var entityHelperMock = mock(EntityHelper.class);
+        when(EntityHelper.getInstance((Class) any())).thenReturn(entityHelperMock);
     }
 
     public static void tearDown() {

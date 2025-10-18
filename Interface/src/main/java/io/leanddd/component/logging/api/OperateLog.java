@@ -44,6 +44,9 @@ public class OperateLog {
 
     @Meta(value = Type.String, length = 1000, listable = BooleanEx.False)
     private String resultMsg;
+    public void setResultMsg(String resultMsg) {
+        this.resultMsg = resultMsg.length() > 1000 ? resultMsg.substring(0, 1000) : resultMsg;
+    }
 
     @Meta(category = Category.PersonName)
     private String username;

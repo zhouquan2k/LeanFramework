@@ -28,7 +28,7 @@ public class BaseEntity<T> implements Serializable, Cloneable {
     protected java.lang.String createdBy;
 
     @JsonIgnore
-    @Meta(value = Type.Timestamp, hidden = True, immutable = true)
+    @Meta(value = Type.Timestamp, hidden = True, immutable = true, defaultValue = "CURRENT_TIMESTAMP")
     protected java.util.Date createdTime;
 
     @JsonIgnore
