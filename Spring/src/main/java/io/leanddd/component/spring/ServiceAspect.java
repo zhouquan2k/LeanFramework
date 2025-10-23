@@ -2,6 +2,7 @@ package io.leanddd.component.spring;
 
 import io.leanddd.component.common.Util;
 import io.leanddd.component.meta.Command;
+import io.leanddd.component.meta.Query;
 import io.leanddd.component.meta.Service;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -40,6 +41,7 @@ public class ServiceAspect {
         private final String basePackage;
         Class<?> theClass;
         Command aCommand;
+        Query aQuery;
         Service aService;
         MethodSignature methodSig;
         Method method;
@@ -56,6 +58,7 @@ public class ServiceAspect {
             this.methodName = methodSig.getName();
             this.aService = theClass.getAnnotation(Service.class);
             this.aCommand = method.getAnnotation(Command.class);
+            this.aQuery = method.getAnnotation(Query.class);
             this.parameterValues = pjp.getArgs();
             ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             if (sra != null) {

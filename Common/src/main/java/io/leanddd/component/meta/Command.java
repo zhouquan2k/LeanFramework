@@ -16,6 +16,8 @@ public @interface Command {
 
     TransactionType transaction() default TransactionType.Normal;
 
+    boolean authenticated() default false;
+
     String permission() default "";
 
     String[] permissions() default {};

@@ -21,6 +21,8 @@ public class User extends BaseEntity<User> {
     String loginName;
     String username;
     String userCode;
+    String password;
+    String email;
     String phone;
     String department;
     UserStatus status;
@@ -32,7 +34,8 @@ public class User extends BaseEntity<User> {
     @RequiredArgsConstructor
     @Getter
     public enum UserStatus implements EnumDescription {
-        Active(EnumTag.Success), Disabled(EnumTag.Warning);
+        Active(EnumTag.Success), Disabled(EnumTag.Warning),
+        RegisterPending(EnumTag.Gray);
 
         private final EnumTag tag;
         private String desc;

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -53,6 +54,12 @@ public class PermissionAspect implements BaseAspect, InitializingBean {
     @Around("io.leanddd.component.spring.ServiceAspect.TheServiceAspect()")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
         var context = serviceAspect.getContext(pjp);
+
+        boolean authRequired = context.aCommand != null ? context.aCommand.authenticated() : (context.aQuery != null ? context.aQuery.authenticated() : false);
+        if (authRequired && Util.isEmpty(Context.getUserId())) {
+            throw new InsufficientAuthenticationException("authentication required");
+        }
+
         Set<String> permissions = new HashSet<String>();
         var permissionDomain = Util.isNotEmpty(context.aService.permissionDomain()) ? context.aService.permissionDomain() : context.aService.name();
         var aQuery = context.method.getAnnotation(Query.class);

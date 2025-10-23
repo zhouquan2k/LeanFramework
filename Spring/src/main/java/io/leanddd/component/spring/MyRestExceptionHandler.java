@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -64,7 +65,9 @@ public class MyRestExceptionHandler {
             logDetail = false;
             errMessage = message;
         } else {
-            if (e instanceof AuthenticationException) {
+            if (e instanceof InsufficientAuthenticationException) {
+                httpStatus =  HttpStatus.UNAUTHORIZED;
+            } else if (e instanceof AuthenticationException) {
                 httpStatus = HttpStatus.FORBIDDEN;
             }
             if (httpStatus == HttpStatus.INTERNAL_SERVER_ERROR) {

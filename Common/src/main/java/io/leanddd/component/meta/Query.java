@@ -11,4 +11,6 @@ public @interface Query {
     String value() default "";
 
     String permission() default "";
+
+    boolean authenticated() default false;
 }

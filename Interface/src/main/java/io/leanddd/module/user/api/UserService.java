@@ -22,6 +22,9 @@ public interface UserService extends CrudService<User> {
     @DeleteMapping("/{userId}/remove/org/{orgId}")
     void removeFromOrg(@PathVariable String userId, @PathVariable String orgId);
 
+    @PutMapping("/{userId}/activate")
+    void activate(@PathVariable String userId);
+
     // TODO should move all myXXX to SecurityService
     @PutMapping("my")
     void updateMyProfile(@RequestBody User user);

@@ -32,6 +32,9 @@ public class Context {
         return Context.currentTimezone;
     }
 
+    public static boolean isAuthenticated() {
+        return theInstance.securityUtil.getAuthInfo().isPresent();
+    }
     public static String getUserId() {
         return theInstance.securityUtil.getAuthInfo().orElseGet(() -> EmptyAuth).getUserId();
     }
