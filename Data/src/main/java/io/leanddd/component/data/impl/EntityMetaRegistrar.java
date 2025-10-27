@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSONArray;
 import io.leanddd.component.common.Util;
 import io.leanddd.component.framework.Context;
 import io.leanddd.component.meta.*;
+import io.leanddd.component.meta.Dictionary;
 import io.leanddd.component.meta.Meta.BooleanEx;
 import io.leanddd.component.meta.Meta.Type;
 import io.leanddd.component.meta.Metadata.*;
@@ -122,6 +123,7 @@ public class EntityMetaRegistrar {
             // add include filters which matches all the classes (or use your own)
             provider.addIncludeFilter(new AnnotationTypeFilter(MetaEntity.class));
             provider.addIncludeFilter(new AnnotationTypeFilter(Service.class));
+            provider.addIncludeFilter(new AnnotationTypeFilter(Dictionary.class));
 
             // get matching classes defined in the package
             for (String basePackage : basePackages) {
@@ -247,6 +249,22 @@ public class EntityMetaRegistrar {
         return fields;
     }
 
+    private void processEnumClass(String className, String simpleName) throws Exception {
+        log.debug("### Enum: " + className);
+        List<DictionaryItemDef> dict = new Vector<DictionaryItemDef>();
+        Class<?> enumClass = Class.forName(className);
+        Method valuesMethod = enumClass.getDeclaredMethod("values");
+        Object[] enumValues = (Object[]) valuesMethod.invoke(null);
+        if (EnumDescription.class.isAssignableFrom(enumClass)) {
+            for (Object enumValue : enumValues) {
+                var ed = (EnumDescription) enumValue;
+                dict.add(new DictionaryItemDef(enumValue, ed.getDesc(),
+                        (ed.getTag() != null) ? ed.getTag().getDesc() : null));
+            }
+            metadata.getDictionaries().put(simpleName, dict);
+        }
+    }
+
     private FieldDef _processFieldMeta(Map<String, Object> fieldMeta) throws Exception {
         String name = (String) fieldMeta.get("name");
         String simpleName = (String) fieldMeta.get("simpleType");
@@ -254,19 +272,7 @@ public class EntityMetaRegistrar {
         Type type = Type.valueOf((String) fieldMeta.getOrDefault("type", "Default"));
         if (type == Type.Enum && !simpleName.equals("Boolean")) {
             if (!metadata.getDictionaries().containsKey(simpleName)) {
-                log.debug("### Enum: " + className);
-                List<DictionaryItemDef> dict = new Vector<DictionaryItemDef>();
-                Class<?> enumClass = Class.forName(className);
-                Method valuesMethod = enumClass.getDeclaredMethod("values");
-                Object[] enumValues = (Object[]) valuesMethod.invoke(null);
-                if (EnumDescription.class.isAssignableFrom(enumClass)) {
-                    for (Object enumValue : enumValues) {
-                        var ed = (EnumDescription) enumValue;
-                        dict.add(new DictionaryItemDef(enumValue, ed.getDesc(),
-                                (ed.getTag() != null) ? ed.getTag().getDesc() : null));
-                    }
-                    metadata.getDictionaries().put(simpleName, dict);
-                }
+                this.processEnumClass(className, simpleName);
             }
         }
         var dbColumnName = camelCase2UnderlineCase(name);
@@ -304,6 +310,11 @@ public class EntityMetaRegistrar {
     @SuppressWarnings("unchecked")
     private boolean processClassAnnotations(CtClass cc) throws Exception {
         var processed = false;
+        Dictionary dictionary = (Dictionary) cc.getAnnotation(Dictionary.class);
+        if (dictionary != null) {
+            processDictionaryClassAnnotation(cc);
+        }
+
         Service service = (Service) cc.getAnnotation(Service.class);
         if (service == null)
             return false;
@@ -361,6 +372,11 @@ public class EntityMetaRegistrar {
             }
         }
         return processed;
+    }
+
+    private void processDictionaryClassAnnotation(CtClass cc) throws Exception {
+
+        this.processEnumClass(cc.getName(), cc.getSimpleName());
     }
 
     private void processClassAnnotation(ClassInfo ci, String annoName, AnnotationMap annoMap) throws Exception {

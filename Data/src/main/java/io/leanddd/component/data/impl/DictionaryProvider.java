@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
+// from dictionary table in database
 public class DictionaryProvider<T extends DictionaryItem> {
 
     static List<DictionaryProvider<?>> allProviders = new Vector<DictionaryProvider<?>>();
