@@ -61,8 +61,8 @@ public class EntityMetaRegistrar {
     static final Metadata metadata = new Metadata();
 
     static {
-        metadata.getDictionaries().put("Boolean", List.of(new DictionaryItemDef(true, "", EnumTag.Success.getDesc()),
-                new DictionaryItemDef(false, "", EnumTag.Warning.getDesc())));
+        metadata.getDictionaries().put("Boolean", List.of(new DictionaryItemDef(true, "是", EnumTag.Success.getDesc()),
+                new DictionaryItemDef(false, "否", EnumTag.Warning.getDesc())));
     }
 
     private static final Pattern CAMELCASE_PATTERN = Pattern.compile("[A-Z]");
