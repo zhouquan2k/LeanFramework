@@ -3,6 +3,7 @@ package io.leanddd.module.file.api;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 
@@ -14,13 +15,13 @@ public interface FileService {
             @RequestParam(value = "path", required = false) String path);
 
     @GetMapping("/{id}")
-    void viewFile(@PathVariable String id, HttpServletResponse response);
+    void viewFile(@PathVariable String id, HttpServletRequest request, HttpServletResponse response);
 
     @GetMapping("/{id}/{filename}")
-    void viewFileEx(@PathVariable String id, @PathVariable String filename, HttpServletResponse response) throws UnsupportedEncodingException;
+    void viewFileEx(@PathVariable String id, @PathVariable String filename, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException;
 
     @GetMapping("/{id}/download")
-    void downloadFile(@PathVariable String id, HttpServletResponse response);
+    void downloadFile(@PathVariable String id, HttpServletRequest request, HttpServletResponse response);
 
     @DeleteMapping("/{id}")
     void deleteFile(@PathVariable String id);
