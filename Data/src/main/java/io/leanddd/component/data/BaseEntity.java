@@ -23,30 +23,25 @@ import static io.leanddd.component.meta.Meta.Type;
 public class BaseEntity<T> implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
 
-    @JsonIgnore
     @Meta(value = Type.RefID, immutable = true)
     protected java.lang.String createdBy;
 
-    @JsonIgnore
-    @Meta(value = Type.Timestamp, hidden = True, immutable = true, defaultValue = "CURRENT_TIMESTAMP")
+    @Meta(value = Type.Timestamp, hidden = True, immutable = true, dbDefaultValue = "CURRENT_TIMESTAMP")
     protected java.util.Date createdTime;
 
-    @JsonIgnore
     @Meta(value = Type.RefID)
     protected java.lang.String updatedBy;
 
-    @JsonIgnore
     @Meta(value = Type.Timestamp, hidden = True)
     protected java.util.Date updatedTime;
 
-    @JsonIgnore
     @Meta(value = Type.RefIDStr, immutable = true)
     protected String legacyId;
 
-    @JsonIgnore
     @Version
-    @Meta(value = Type.Integer, hidden = True, immutable = true, defaultValue = "0" )
+    @Meta(value = Type.Integer, hidden = True, immutable = true, dbDefaultValue = "0" )
     protected Integer version;
+
     @Transient
     @JsonIgnore
     protected Boolean delFlag;

@@ -150,8 +150,8 @@ public class MetaDefinitions {
                                     new AnnotationProperty[]{new AnnotationProperty("description", null, "label"),}),
                                     new AnnotationDesc("com.gitee.sunchenbin.mybatis.actable.annotation.DefaultValue",
                                             new AnnotationProperty[]{
-                                                    new AnnotationProperty("value", null, "defaultValue")},
-                                            data -> Util.isNotEmpty((String) data.get("defaultValue"))),
+                                                    new AnnotationProperty("value", null, "dbDefaultValue")},
+                                            data -> Util.isNotEmpty((String) data.get("dbDefaultValue"))),
                                     new AnnotationDesc("com.gitee.sunchenbin.mybatis.actable.annotation.Unique",
                                             new AnnotationProperty[]{
                                                     new AnnotationProperty("columns", null, "unique")},
@@ -261,8 +261,8 @@ public class MetaDefinitions {
                                     new AnnotationProperty[]{new AnnotationProperty("type", "INT", DBTypeEnum),
                                             new AnnotationProperty("length", 10, "length"),
                                             new AnnotationProperty("comment", null, "label"),
-                                            new AnnotationProperty("isNull", null, "isNull"),
-                                            new AnnotationProperty("defaultValue", null, "defaultValue"),})}},
+                                            new AnnotationProperty("isNull", null, "isNull")}
+                            )}},
                     {"Text",
                             new AnnotationDesc[]{new AnnotationDesc(ColumnAnnotationClass,
                                     new AnnotationProperty[]{new AnnotationProperty("type", "TEXT", DBTypeEnum),

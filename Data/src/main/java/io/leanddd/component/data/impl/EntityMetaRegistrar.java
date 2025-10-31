@@ -495,6 +495,9 @@ public class EntityMetaRegistrar {
         ret.put("immutable", meta.immutable());
         if (meta.colWidth() >= 0)
             ret.put("colWidth", meta.colWidth());
+        if (Util.isNotEmpty(meta.dbDefaultValue())) {
+            ret.put("dbDefaultValue", meta.dbDefaultValue());
+        }
         if (Util.isNotEmpty(meta.defaultValue())) {
             ret.put("defaultValue", meta.defaultValue());
         }

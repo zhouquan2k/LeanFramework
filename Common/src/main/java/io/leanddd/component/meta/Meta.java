@@ -33,7 +33,9 @@ public @interface Meta {
 
     String refData() default ""; // "dictionary.institution" "entity.AssemblyFactory"
 
-    String defaultValue() default "";
+    String defaultValue() default ""; //default value from ui
+
+    String dbDefaultValue() default "";
     /////////
 
     // ui related below
