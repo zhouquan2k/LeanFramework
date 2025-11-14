@@ -38,6 +38,7 @@ public class BaseEntity<T> implements Serializable, Cloneable {
     @Meta(value = Type.RefIDStr, immutable = true)
     protected String legacyId;
 
+    // 需要序列化用来区分是新建还是更新
     @Version
     @Meta(value = Type.Integer, hidden = True, immutable = true, dbDefaultValue = "0" )
     protected Integer version;

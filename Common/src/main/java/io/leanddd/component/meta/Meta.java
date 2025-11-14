@@ -55,7 +55,7 @@ public @interface Meta {
         ID, IDStr,
         RefID, RefIDStr,
         Enum, Dictionary,
-        String, Text,
+        String, Text, MediumText,
         StringList,
         JSON,
         Integer, Decimal,
