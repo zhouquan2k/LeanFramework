@@ -4,30 +4,28 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.wrapper.MapWrapper;
 import org.apache.ibatis.reflection.wrapper.ObjectWrapper;
 import org.apache.ibatis.reflection.wrapper.ObjectWrapperFactory;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jdbc.repository.config.AbstractJdbcConfiguration;
 
-import javax.sql.DataSource;
 import java.util.Map;
 
 @Configuration
 public class MybatisConfig extends AbstractJdbcConfiguration implements ApplicationContextAware {
 
     @Bean
-    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
-        SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource);
-        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
-        configuration.setMapUnderscoreToCamelCase(true);
-        configuration.setObjectWrapperFactory(new MapWrapperFactory());
-        sessionFactory.setConfiguration(configuration);
-        //sessionFactory.setObjectFactory(new MybatisObjectFactory());
-        // 其他配置...
-        return sessionFactory.getObject();
+    public MybatisPaginationInterceptor paginationInterceptor() {
+        return new MybatisPaginationInterceptor();
+    }
+
+    @Bean
+    public ConfigurationCustomizer mybatisConfigurationCustomizer() {
+        return configuration -> {
+            configuration.setMapUnderscoreToCamelCase(true);
+            configuration.setObjectWrapperFactory(new MapWrapperFactory());
+        };
     }
 
     // 解决map驼峰映射问题

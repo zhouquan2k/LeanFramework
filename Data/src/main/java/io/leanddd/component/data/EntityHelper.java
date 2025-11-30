@@ -232,7 +232,7 @@ public class EntityHelper<T> {
     public void update(Object target, Object src) {
         Util.check(target.getClass() == entityClass);
         // only support simple type, you must assign objects manually
-        this.entityDef.getFields().stream().filter(field -> field.isEditable()).forEach(field -> {
+        this.entityDef.getFields().stream().filter(field -> field.isEditable() && field.getType() != Type.JSON).forEach(field -> {
             Object value;
             try {
                 value = this.getPropertyValue(src, field.getName());

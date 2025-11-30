@@ -2,6 +2,7 @@ package io.leanddd.component.spring;
 
 import io.leanddd.component.framework.Context;
 import io.leanddd.component.framework.NoCommonResponse;
+import io.leanddd.component.framework.PaginationList;
 import io.leanddd.component.framework.Response;
 import io.leanddd.component.meta.Service;
 import lombok.extern.slf4j.Slf4j;
@@ -53,10 +54,14 @@ public class MyRestAdvice implements ResponseBodyAdvice<Object> {
                 log.warn("return too many rows: " + request.getURI());
                 list = list.subList(0, 1000);
             }
-            var type = list.size() > 0 ? list.get(0).getClass().getSimpleName() : null;
+            var type = !list.isEmpty() ? list.get(0).getClass().getSimpleName() : null;
+            if (body instanceof PaginationList<?>) {
+                PaginationList<?> plist = (PaginationList<?>) body;
+                size = plist.getPagination().getTotalCount();
+            }
             return new Response(HttpStatus.OK.value(), true, null, null, date, list, type, size);
         }
-        if (body instanceof NoCommonResponse)
+        else if (body instanceof NoCommonResponse)
             return body;
         else if (body instanceof BufferedImage) {
             return body;
