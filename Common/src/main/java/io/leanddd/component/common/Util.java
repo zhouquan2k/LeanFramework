@@ -34,8 +34,12 @@ public class Util {
     }
 
     public static void checkBiz(boolean b, String errCode, String msgFormat, Object... params) throws BizException {
-        if (!b)
+        if (!b) {
+            if (params == null || params.length == 0) {
+                throw new BizException(msgFormat, errCode, null);
+            }
             throw new BizException(msgFormat, params, errCode, null);
+        }
     }
 
     // for Boolean
