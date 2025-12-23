@@ -1,9 +1,6 @@
 package io.leanddd.module.user.api;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +14,9 @@ public interface UserQueryService {
     List<User> queryByExample(@RequestBody Map<String, Object> example);
 
     List<User> queryUsersByOrg(String orgId);
+
+    @GetMapping("department/{departmentId}")
+    List<User> getUsersByDepartment(@PathVariable String departmentId);
 
     @GetMapping("my")
     User getMyProfile();

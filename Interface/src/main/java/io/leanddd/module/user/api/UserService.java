@@ -6,6 +6,7 @@ import io.leanddd.component.misc.api.CrudService;
 import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
@@ -30,7 +31,7 @@ public interface UserService extends CrudService<User> {
     void updateMyProfile(@RequestBody User user);
 
     @PutMapping("my/options")
-    void updateMyOptions(@RequestBody Map<String,Object> options);
+    void updateMyOptions(@RequestBody Map<String,Object> options, HttpServletRequest request);
 
     @PutMapping("my/password")
     void updateMyPassword(@RequestBody UpdatePasswordParams params) throws BizException;
