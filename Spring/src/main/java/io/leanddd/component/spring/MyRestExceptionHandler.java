@@ -61,7 +61,7 @@ public class MyRestExceptionHandler {
                     messageSource.getMessage("Exception." + be.getMessagePattern().replace(' ', '_'), be.getMessageParams(), be.getMessage(), req.getLocale())
                     : be.getMessage();
             ret = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(HttpStatus.BAD_REQUEST.value(), false,
-                    be.getErrCode(), message + "," + be.getErrDetail(), new Date(), null, null, 0));
+                    be.getErrCode(), message + (be.getErrDetail() != null ? "," + be.getErrDetail() : ""), new Date(), null, null, 0));
             logDetail = false;
             errMessage = message;
         } else {

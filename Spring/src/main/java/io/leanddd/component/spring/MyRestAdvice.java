@@ -57,7 +57,7 @@ public class MyRestAdvice implements ResponseBodyAdvice<Object> {
             var type = !list.isEmpty() ? list.get(0).getClass().getSimpleName() : null;
             if (body instanceof PaginationList<?>) {
                 PaginationList<?> plist = (PaginationList<?>) body;
-                size = plist.getPagination().getTotalCount();
+                size = plist.getPagination() != null ? plist.getPagination().getTotalCount() : 0;
             }
             return new Response(HttpStatus.OK.value(), true, null, null, date, list, type, size);
         }

@@ -34,7 +34,7 @@ public class MybatisPaginationInterceptor implements Interceptor {
         // RowBounds rowBounds = (RowBounds) invocation.getArgs()[2];
         Pagination pagination = getPagination(parameter);
         // 判断是否分页（offset/limit 不为默认）
-        if (pagination == null) {
+        if (pagination == null || pagination.getLimit() == null || pagination.getLimit() <= 0 ) {
             return invocation.proceed();
         }
         Executor executor = (Executor) invocation.getTarget();
@@ -50,7 +50,6 @@ public class MybatisPaginationInterceptor implements Interceptor {
             pagination.setTotalCount((int) total);
         }
 
-        // 执行分页 SQL（数据库层 limit，不是内存分页）
         String pageSql = originalSql + " LIMIT " + pagination.getOffset() + ", " + pagination.getLimit();
         BoundSql newBoundSql = new BoundSql(ms.getConfiguration(), pageSql,
                 boundSql.getParameterMappings(), parameter);
