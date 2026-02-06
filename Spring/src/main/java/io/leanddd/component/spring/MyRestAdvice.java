@@ -68,6 +68,9 @@ public class MyRestAdvice implements ResponseBodyAdvice<Object> {
         } else if (selectedContentType != null && Stream.of(MediaType.TEXT_HTML, MediaType.TEXT_MARKDOWN).anyMatch(selectedContentType::includes)) {
             return body;
         }
+        else if (body instanceof byte[]) {
+            return body;
+        }
         var type = body != null ? body.getClass().getSimpleName() : null;
         return new Response(HttpStatus.OK.value(), true, null, null, date, body, type, body == null ? 0 : 1);
     }
