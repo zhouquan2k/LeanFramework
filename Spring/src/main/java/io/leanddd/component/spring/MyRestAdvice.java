@@ -2,6 +2,7 @@ package io.leanddd.component.spring;
 
 import io.leanddd.component.framework.Context;
 import io.leanddd.component.framework.NoCommonResponse;
+import io.leanddd.component.framework.Pagination;
 import io.leanddd.component.framework.PaginationList;
 import io.leanddd.component.framework.Response;
 import io.leanddd.component.meta.Service;
@@ -50,6 +51,7 @@ public class MyRestAdvice implements ResponseBodyAdvice<Object> {
         if (body instanceof List) {
             List<?> list = (List<?>) body;
             var size = list.size();
+            Pagination pagination = null;
             if (size > 1000) {
                 log.warn("return too many rows: " + request.getURI());
                 list = list.subList(0, 1000);
@@ -57,9 +59,10 @@ public class MyRestAdvice implements ResponseBodyAdvice<Object> {
             var type = !list.isEmpty() ? list.get(0).getClass().getSimpleName() : null;
             if (body instanceof PaginationList<?>) {
                 PaginationList<?> plist = (PaginationList<?>) body;
-                size = plist.getPagination() != null ? plist.getPagination().getTotalCount() : 0;
+                pagination = plist.getPagination();
+                size = pagination != null && pagination.getTotalCount() != null ? pagination.getTotalCount() : 0;
             }
-            return new Response(HttpStatus.OK.value(), true, null, null, date, list, type, size);
+            return new Response(HttpStatus.OK.value(), true, null, null, date, list, type, size, pagination);
         }
         else if (body instanceof NoCommonResponse)
             return body;
